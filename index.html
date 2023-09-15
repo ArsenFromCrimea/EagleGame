@@ -1,0 +1,300 @@
+﻿<html>
+<head>
+<title>Game with eggs</title>
+
+<meta charset="UTF-8"/>
+
+<link rel="stylesheet" href="game.files/game.css"/>
+<link rel="stylesheet" href="for_all_pages/my_style.css"/>
+<script src="for_all_pages/js.js"></script>
+<script src="game.files/eagle.js"></script>
+<script src="game.files/Crimea.js"></script>
+
+
+</head>
+<body onload="print_for_clients()">
+
+<iframe src="chat" id="iframe" name="variables" scrolling="no"></iframe>
+
+
+<div id="text">
+Ниже Вашему вниманию представлена та часть нашего сайта,
+которая
+посвящена римейку <a href="https://ru.wikipedia.org/wiki/%D0%9D%D1%83,_%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B8!_(%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B8%D0%B3%D1%80%D0%B0)">Ну погоди!</a>.
+Правда, здесь управление ловцом ведётся с помощью клавиатуры.
+Можно и мышью (для чего кнопки по своему прямому назначению работают только после повторного клика), при этом игра до смешного становится похожею
+на развлечение уголовников из фильма "Место встречи изменить нельзя", когда они быстро втыкали нож между пальцами.
+</div>
+
+<div class="top">
+
+<div class="left-border">
+	<div class="href"><input type="button" onclick="reaction(0,this)" target="content" class="sciences" value="Неассоциативные матрицы"/></div>
+	<div class="href"><input type="button" onclick="reaction(2,this)" target="content" class="sciences" value="Численные методы"/></div>
+	<div class="href"><input type="button" onclick="reaction(4,this)" target="content" class="sciences" value="Задача Хладни"/></div>
+</div>
+
+	<canvas id="my_screen" width="330" height="200"></canvas>
+
+<div class="right-border">
+	<div class="href"><input type="button" onclick="reaction(1,this)" value="Игры"/></div>
+	<div class="href"><input type="button" onclick="reaction(3,this)" target="content" class="sciences" value="Математика"/></div>
+</div>
+
+
+</div>
+
+
+<div class="top">
+
+<div class="left-border" id="scores">
+</div>
+
+<canvas id="crimean_screen" width="330" height="250"></canvas>
+
+<div class="right-border">
+
+</div>
+
+</div>
+
+
+
+
+	
+<audio id='type_sound' src='for_all_pages/type.wav'/><audio id='record_sound' src='for_all_pages/record.wav'/><audio id='explosion_sound' src='for_all_pages/bomb.wav'/><audio id='catch_sound' src='for_all_pages/catch.wav'/>
+
+
+
+
+	
+</body>
+<script>
+
+	my_screen=document.getElementById("my_screen");
+	
+	my_screen.height=400;
+	my_screen.width=500;
+	
+	canvas=my_screen.getContext("2d");
+
+	crimean_screen=document.getElementById("crimean_screen");
+	crimean_screen.width=400;
+	crimean_screen.height=130;
+	//crimean_screen.style.border="1px solid red";
+	canvas=my_screen.getContext("2d");
+	crimean_canvas=crimean_screen.getContext("2d");
+
+	
+	left=1;
+	xCentre=200;
+	top1=0;
+	dx=1;
+
+	drawEagle();
+
+	delta=100;
+	length=135;
+	height=25;
+	COUNT=5;
+	balls=[];
+
+	drawGuns=function(){
+		canvas.beginPath();
+		for(var i=0;i<COUNT;i++){
+			var y=gun_y(i);
+			var x=(i%2==0?0:my_screen.width);
+			canvas.moveTo(x,y);
+			canvas.lineTo(x+(i%2==0?1:-1)*length,y+height);
+		}
+		canvas.stroke();
+	}
+
+
+	radius=10;
+
+
+	gun_y=function(i){
+		return Math.floor(i/2)*delta+54;
+	}
+
+
+
+	dy=function(ball){
+		return ((ball.gun%2?my_screen.width-ball.x:ball.x)<length?dx*height/length:(ball.y-gun_y(ball.gun))*0.1);
+	}
+
+	drawBall=function(ball){
+		canvas.beginPath();
+		var fill=(ball.color!="#ffffff");
+		
+		if(!fill){
+			canvas.strokeStyle="#000000";
+		}
+		else{
+			canvas.fillStyle=ball.color;
+		}
+		canvas.arc(ball.x,ball.y,radius,0,2*Math.PI);
+		canvas.closePath();
+		if(fill){
+			canvas.fill();
+		}
+		else{
+			canvas.stroke();
+		}
+	}
+
+
+	var frame_number=0;
+
+	scores=0;
+	my_record=0;
+	scoreelement=document.getElementById("scores");
+
+
+	getRandomColor=function(){
+		var r=Math.random();
+		if(r<1/3){
+			return "#000000";
+		}
+		if(r<2/3){
+			return "#ffff00";
+		}
+		return "#ffffff";
+	}
+
+	calculate_record=function(){
+		var r=0;
+		var a=document.getElementsByClassName("individual_record");
+		for(i in a){
+			if(i.innerHTML>r){
+				r=i.innerHTML;
+			}
+		}
+		return r;
+	}
+
+	refresh=function(){
+			scoreelement.innerHTML=scores;
+			if(scores>0){
+				if(scores>my_record){
+					my_record=scores;
+				}
+				var iframe=iframedocument();
+				if(scores>calculate_record()){
+					document.forms["scores"].target="variables";
+					document.getElementById("scorefield").value=scores;
+					document.forms["scores"].submit();
+				}
+				scoreelement.style.color="yellow";
+				scoreelement.style.background="black";
+				scoreelement.style.fontSize="50px";
+			}
+			else{
+				scoreelement.style.color="black";
+				scoreelement.style.background="yellow";
+				scoreelement.style.fontSize="25px";
+			}
+			
+	}
+
+	frame=function(){
+		clear(my_screen,canvas);
+		
+
+		remove=function(i,success){
+			balls[i]=balls[balls.length-1];
+			balls.length--;
+			scores+=success;
+			refresh();
+		}
+		
+		for(var i=0;i<balls.length;i++){
+			balls[i].y+=dy(balls[i]);
+			if(balls[i].y>my_screen.height){
+				remove(i,-3);
+				document.getElementById("explosion_sound").play();
+			}
+			else{
+				if((Math.abs(balls[i].y-gun_y(balls[i].gun)-height)<1)&&((left+1)/2!=balls[i].gun%2)&&(top1/delta==Math.floor(balls[i].gun/2))){
+					remove(i,1);
+					document.getElementById("catch_sound").play();
+				}
+				else{
+					balls[i].x+=(balls[i].gun%2?-dx:dx);
+				}
+			}
+		}
+
+		frame_number++;
+		if(frame_number==30){
+			frame_number=0;
+			var ball_gun=Math.floor(Math.random()*COUNT);
+			var ball={gun:ball_gun,x:(ball_gun%2?my_screen.width:0),y:gun_y(ball_gun)-radius,color:getRandomColor()};
+			balls.length++;
+			balls[balls.length-1]=ball;
+		}
+
+		for(var i=0;i<balls.length;i++){
+			drawBall(balls[i]);
+		}
+
+		
+		drawEagle();
+		drawGuns();
+	}
+
+
+
+	turnHead=function(l){
+		left=l;
+		xCentre=(left==1?200:my_screen.width-200);
+	}
+
+	document.body.onkeydown = function(e){
+						switch(e.keyCode){
+							case 40:if(top1<Math.floor(COUNT/2)*delta)top1+=delta;
+							break;
+							case 38:if(top1>0)top1-=delta;
+							break;
+							case 37:turnHead(1);
+							break;
+							case 39:turnHead(-1);
+						};
+	};
+
+	refresh();
+
+	addresses=['/Articles/Koyalovich/Koyalovich.html','/Articles/Tetris.html','/Theory/Calculus/index.html','/Articles/Fiveteen.html','/Articles/Chladni/Method.html'];
+	names=['Неассоциативные матрицы','Игры','Численные методы','Математика','Задача Хладни'];
+
+	setInterval(frame,40);
+
+	crimeanFrame=function(){
+		clear(crimean_screen,crimean_canvas);
+		drawHammer(crimean_canvas);
+		engine_tact()
+	}
+
+	setInterval(crimeanFrame,period);
+
+	
+
+	reaction=function(i,button){
+		
+		if(button.style.color!="blue"){
+			if(window.last){
+				last.style.color="black";
+			}
+			last=button;
+			turnHead(1-(i%2)*2);
+			top1=delta*Math.floor(i/2);
+			button.style.color="blue";
+		}
+		else{
+			window.location.replace(addresses[i]);
+		}
+	}
+
+</script>
+</html>
