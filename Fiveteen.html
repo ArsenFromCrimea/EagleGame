@@ -1,7 +1,7 @@
-<html>
+п»ї<html>
 <head>
-<meta charset='Windows-1251'/>
-<title>Пятнашки</title>
+<meta charset='UTF-8'/>
+<title>РџСЏС‚РЅР°С€РєРё</title>
 <script>
 	
 	m=3;
@@ -15,7 +15,7 @@
 		var hole=where(0);
 		if((pressed.i!=hole.i)&&(pressed.j!=hole.j)){
 			if(warning){
-				alert("Куда же ты жмёшь?");
+				alert("РљСѓРґР° Р¶Рµ С‚С‹ Р¶РјС‘С€СЊ?");
 			}
 		}
 		else{
@@ -46,7 +46,7 @@
 			buttons[pressed.i][pressed.j]=0;
 			repaint();
 			if(OK()&&warning){
-				alert("Молодец!");
+				alert("РњРѕР»РѕРґРµС†!");
 			}
 		}
 	}
@@ -136,7 +136,7 @@
 			reset();
 		}
 		else{
-			alert("Не могу больше уменьшать высоту");
+			alert("РќРµ РјРѕРіСѓ Р±РѕР»СЊС€Рµ СѓРјРµРЅСЊС€Р°С‚СЊ РІС‹СЃРѕС‚Сѓ");
 		}
 	}
 	right=function(){
@@ -149,7 +149,7 @@
 			reset();
 		}
 		else{
-			alert("Не могу больше уменьшать ширину");
+			alert("РќРµ РјРѕРіСѓ Р±РѕР»СЊС€Рµ СѓРјРµРЅСЊС€Р°С‚СЊ С€РёСЂРёРЅСѓ");
 		}
 	}
 
@@ -158,20 +158,20 @@
 
 </head>
 <body>
-Ниже представлена
-игра с
-<a href="../index.html" target="_top">сайта</a> "Пятнашки".
+РќРёР¶Рµ РїСЂРµРґСЃС‚Р°РІР»РµРЅР°
+РёРіСЂР° СЃ
+<a href=".">РЅР°С€РµРіРѕ СЃР°Р№С‚Р°</a> "РџСЏС‚РЅР°С€РєРё".
 
 <hr/>
-<input type='button' onclick='random()' value='Сброс'/>
+<input type='button' onclick='random()' value='РЎР±СЂРѕСЃ'/>
 <div id="my_screen">
 </div>
 <hr/>
-<input type='button' onclick='right()' value='Увеличить ширину'/>
-<input type='button' onclick='left()' value='Уменьшить ширину'/>
+<input type='button' onclick='right()' value='РЈРІРµР»РёС‡РёС‚СЊ С€РёСЂРёРЅСѓ'/>
+<input type='button' onclick='left()' value='РЈРјРµРЅСЊС€РёС‚СЊ С€РёСЂРёРЅСѓ'/>
 <br/>
-<input type='button' onclick='up()' value='Увеличить высоту'/>
-<input type='button' onclick='down()' value='Уменьшить высоту'/>
+<input type='button' onclick='up()' value='РЈРІРµР»РёС‡РёС‚СЊ РІС‹СЃРѕС‚Сѓ'/>
+<input type='button' onclick='down()' value='РЈРјРµРЅСЊС€РёС‚СЊ РІС‹СЃРѕС‚Сѓ'/>
 </body>
 <script>
 	my_screen=document.getElementById("my_screen");
