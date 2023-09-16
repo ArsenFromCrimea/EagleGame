@@ -1,0 +1,63 @@
+<html>
+<head>
+<style>
+canvas{
+	border:1px solid red;
+}
+</style>
+<title>Normal distribution</title>
+<script>
+
+size=0.1;
+N=20;
+values=new Array(N);
+for(i=0;i<N;i++){
+	values[i]=0;
+}
+sum=0;
+transpose=function(x,ca){
+	return ca.width/2+x*ca.width*size;
+}
+onePoint=function(){
+	var phi=Math.random();
+	var ro=Math.random();
+	var angle=2*Math.PI*phi;
+	var r=Math.sqrt(-2*Math.log(ro));
+	co_circle.beginPath();
+	var x=Math.cos(angle)*r;
+	var y=Math.sin(angle)*r;
+	co_circle.arc(transpose(x,ca_circle),y0+y*ca_circle.height*size,2,0,2*Math.PI);
+	co_circle.stroke();
+	co_normal.clearRect(0,0,ca_normal.width,ca_normal.height);
+	sum++;
+	for(var i=0;i<N;i++){
+		var left=delta*i;
+		var right=left+delta;
+		if(transpose(x,ca_normal)<=right&&transpose(x,ca_normal)>left){
+			values[i]++;
+		}
+		var Y=values[i]*900/sum;
+		co_normal.fillRect(left,ca_normal.height-Y,delta,Y);
+	}
+}
+
+start=function(){
+	ca_circle=document.getElementById("circle");
+	co_circle=ca_circle.getContext("2d");
+	ca_normal=document.getElementById("normal");
+	delta=ca_normal.width/N;
+	co_normal=ca_normal.getContext("2d");
+	y0=ca_circle.height/2;
+	setInterval(onePoint,40);
+}
+</script>
+</head>
+
+<body onload="start();">
+
+<canvas id="circle" width="300" height="300"></canvas>
+<br/>
+<canvas id="normal" width="400" height="200"></canvas>
+</body>
+
+</html>
