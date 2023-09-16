@@ -1,7 +1,9 @@
 k=1;
 
 
-
+function reaction(number){
+	window.open(addresses[number]);
+}
 
 lineTo=function(x_,y_){
 	canvas.lineTo(k*x_,k*y_);
